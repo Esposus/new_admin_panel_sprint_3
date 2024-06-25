@@ -1,3 +1,5 @@
+import logging
+
 import psycopg2
 
 from psycopg2.extensions import connection as _connection
@@ -37,15 +39,19 @@ class PostgresRun:
 
     def __init__(self):
         self.connection = self.connect()
+        self.logger = logging.getLogger(__name__)
 
     def connect(self):
         with PostgresConnect().connect() as conn:
             return conn
 
-    def execute_query(self, query):
+    def execute_query(self, query, params=None):
         with self.connection.cursor() as cursor:
-            cursor.execute(query)
-            return cursor.fetchall()
+            self.logging.info(f'Выполнение запроса: {query}')
+            cursor.execute(query, params)
+            result = cursor.fetchall()
+            self.logger.info(f'Результат запроса: {result}')
+            return result
 
     def get_filmworks(self, timestamp) -> list:
         if filmworks := self.execute_query(query.query_filmworks(timestamp)):
