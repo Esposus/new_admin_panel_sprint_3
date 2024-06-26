@@ -78,7 +78,7 @@ class PostgresRun:
             return [models.FilmworksGenresModel(**filmwork).id for filmwork in filmworks]
         return []
 
-    def get_filmwork_all(self, filmwork_ids: tuple) -> None:
+    def get_filmwork_all(self, filmwork_ids: tuple):
         if filmwork_ids:
             return self.execute_query(query.query_filmworks_all(filmwork_ids))
         return None

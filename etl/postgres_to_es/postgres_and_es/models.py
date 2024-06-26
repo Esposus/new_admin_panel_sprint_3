@@ -16,7 +16,7 @@ class FilmworksModel(UUIDMixin, ModifiedMixin):
 
 
 class PersonsModel(UUIDMixin, ModifiedMixin):
-    """Модель людей"""
+    """Модель человеков"""
 
 
 class GenresModel(UUIDMixin, ModifiedMixin):
@@ -24,7 +24,7 @@ class GenresModel(UUIDMixin, ModifiedMixin):
 
 
 class FilmworksPersonsModel(UUIDMixin, ModifiedMixin):
-    """Модель связи фильмов и людей"""
+    """Модель связи фильмов и человеков"""
 
 
 class FilmworksGenresModel(UUIDMixin, ModifiedMixin):
@@ -32,7 +32,7 @@ class FilmworksGenresModel(UUIDMixin, ModifiedMixin):
 
 
 class PersonESModel(BaseModel):
-    """Модель для ES для людей"""
+    """Модель для ES для человеков"""
     name: str
 
 

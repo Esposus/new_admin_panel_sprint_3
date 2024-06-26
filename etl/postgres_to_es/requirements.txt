@@ -1,0 +1,11 @@
+annotated-types
+certifi
+elastic-transport
+elasticsearch
+psycopg2-binary
+pydantic
+pydantic-settings
+pydantic_core
+python-dotenv
+typing_extensions
+urllib3
