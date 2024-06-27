@@ -3,7 +3,7 @@ import logging
 
 from elasticsearch import Elasticsearch, helpers
 
-from etl.postgres_to_es.config.settings import settings_es as settings
+from etl.postgres_to_es.config.settings import settings_es
 from etl.postgres_to_es.elt.backoff import func_backoff as backoff
 
 
@@ -12,13 +12,13 @@ class ElasticSearchRun:
     def __init__(self):
         self.connection = Elasticsearch([
             {
-                'host': settings.ES_HOST,
-                'port': settings.ES_PORT,
+                'host': settings_es.HOST,
+                'port': settings_es.PORT,
                 'scheme': 'http',
             }
         ])
-        self.index_name = settings.ES_INDEX
-        self.schema = self.get_schema(settings.ES_SCHEMA)
+        self.index_name = settings_es.INDEX
+        self.schema = self.get_schema(settings_es.SCHEMA)
         self.indices = self.get_indices()
 
     @staticmethod

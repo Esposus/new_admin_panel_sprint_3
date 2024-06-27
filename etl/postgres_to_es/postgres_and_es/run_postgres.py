@@ -6,22 +6,22 @@ from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 from psycopg2 import OperationalError
 
-from config.settings import settings_postgres
+from etl.postgres_to_es.config.settings import settings_postgres
+from etl.postgres_to_es.elt.backoff import func_backoff
 from etl.postgres_to_es.postgres_and_es import queries_to_postgres as query
-from postgres_and_es import models
-from etl.backoff import func_backoff
+from etl.postgres_to_es.postgres_and_es import models
 
 
 class PostgresConnect:
 
     def __init__(self):
         self.dsl: dict = {
-            'dbname': settings_postgres.DB_NAME,
-            'user': settings_postgres.DB_USER,
-            'password': settings_postgres.DB_PASSWORD,
-            'host': settings_postgres.DB_HOST,
-            'port': settings_postgres.DB_PORT,
-            'options': settings_postgres.DB_OPTIONS
+            'dbname': settings_postgres.NAME,
+            'user': settings_postgres.USER,
+            'password': settings_postgres.PASSWORD,
+            'host': settings_postgres.HOST,
+            'port': settings_postgres.PORT,
+            'options': settings_postgres.OPTIONS
         }
         self.connection = None
 
@@ -41,13 +41,14 @@ class PostgresRun:
         self.connection = self.connect()
         self.logger = logging.getLogger(__name__)
 
-    def connect(self):
+    @staticmethod
+    def connect():
         with PostgresConnect().connect() as conn:
             return conn
 
-    def execute_query(self, query, params=None):
+    def execute_query(self, query, params=None) -> list:
         with self.connection.cursor() as cursor:
-            self.logging.info(f'Выполнение запроса: {query}')
+            self.logger.info(f'Выполнение запроса: {query}')
             cursor.execute(query, params)
             result = cursor.fetchall()
             self.logger.info(f'Результат запроса: {result}')
@@ -78,7 +79,7 @@ class PostgresRun:
             return [models.FilmworksGenresModel(**filmwork).id for filmwork in filmworks]
         return []
 
-    def get_filmwork_all(self, filmwork_ids: tuple):
+    def get_filmwork_all(self, filmwork_ids: tuple) -> list | None:
         if filmwork_ids:
             return self.execute_query(query.query_filmworks_all(filmwork_ids))
         return None

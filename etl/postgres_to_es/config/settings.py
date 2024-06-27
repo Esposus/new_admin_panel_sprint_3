@@ -9,19 +9,19 @@ load_dotenv()
 class SettingsPostgres(BaseSettings):
     model_config = SettingsConfigDict(env_file='.env', env_file_encoding='utf-8')
 
-    DB_NAME: str
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_HOST: str = 'postgres_etl'
-    DB_PORT: int = 5432
-    DB_OPTIONS: str = '-c search_path=content'
+    NAME: str
+    USER: str
+    PASSWORD: str
+    HOST: str = 'postgres_etl'
+    PORT: int = 5432
+    OPTIONS: str = '-c search_path=content'
 
 
 class SettingsElasticSearch(BaseSettings):
-    ES_HOST: str = 'elasticsearch_etl'
-    ES_PORT: int = 9200
-    ES_INDEX: str = 'movies'
-    ES_SCHEMA: str = os.path.join('config', 'es_schema.json')
+    HOST: str = 'elasticsearch_etl'
+    PORT: int = 9200
+    INDEX: str = 'movies'
+    SCHEMA: str = os.path.join('config', 'es_schema.json')
 
 
 class SettingsETL(BaseSettings):
