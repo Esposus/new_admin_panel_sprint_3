@@ -1,0 +1,29 @@
+version: '2.23.3'
+
+services:
+
+  python_etl:
+    build: .
+    container_name: python_etl
+    restart: always
+    depends_on:
+      - elasticsearch_etl
+
+  postgres_etl:
+    image: postgres:13
+    container_name: postgres_etl
+    env_file:
+      - ./postgres_to_es/config/.env
+    volumes:
+      - ./postgres_to_es/dump:/docker-entrypoint-initdb.d
+
+  elasticsearch_etl:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    container_name: elasticsearch_etl
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+    depends_on:
+      - postgres_etl

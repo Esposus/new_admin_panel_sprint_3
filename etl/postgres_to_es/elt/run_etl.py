@@ -44,12 +44,7 @@ class ETL:
             filmwork_ids: set = {filmwork.get('fw_id') for filmwork in source_data}
         
             for filmwork_id in filmwork_ids:
-                genres: list = []
-                directors: list = []
-                actors_names: list = []
-                writers_names: list = []
-                actors: list = []
-                writers: list = []
+                genres, directors, actors_names, writers_names, actors, writers = [], [], [], [], [], []
                 for filmwork in source_data:
                     if filmwork.get('fw_id') == filmwork_id:
                         title = filmwork.get('title')
