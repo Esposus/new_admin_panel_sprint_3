@@ -1,5 +1,3 @@
-import logging
-
 from etl.postgres_to_es.postgres_and_es.run_es import ElasticSearchRun
 from etl.postgres_to_es.postgres_and_es import models
 from etl.postgres_to_es.postgres_and_es.run_postgres import PostgresRun

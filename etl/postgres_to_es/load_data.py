@@ -1,5 +1,4 @@
 import json
-import logging
 from time import sleep
 
 from etl.postgres_to_es.config.settings import settings_etl
