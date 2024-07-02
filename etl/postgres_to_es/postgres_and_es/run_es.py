@@ -1,6 +1,6 @@
 import json
 
-from elasticsearch import Elasticsearch, helpers
+from elasticsearch import ConnectionError, ConnectionTimeout, Elasticsearch, helpers
 
 from etl.postgres_to_es.config.settings import settings_es
 from etl.postgres_to_es.elt.backoff import func_backoff as backoff
@@ -28,7 +28,7 @@ class ElasticSearchRun:
         except FileNotFoundError:
             raise FileNotFoundError(f'File {file_path} not found')
 
-    @backoff(exception=ConnectionError)
+    @backoff(exception=(ConnectionError, ConnectionTimeout))
     def get_indices(self) -> list:
         indices = list(self.connection.indices.get_alias())
         if self.index_name not in indices:
@@ -39,13 +39,13 @@ class ElasticSearchRun:
         if body := self.schema:
             self.connection.indices.create(index=index_name, body=body)
 
-    @backoff(exception=ConnectionError)
+    @backoff(exception=(ConnectionError, ConnectionTimeout))
     def get_connection(self):
         if self.connection.ping():
             return True
         raise ConnectionError
 
-    @backoff(exception=ConnectionError)
+    @backoff(exception=(ConnectionError, ConnectionTimeout))
     def add_data(self, actions) -> None:
         helpers.bulk(
             client=self.connection,

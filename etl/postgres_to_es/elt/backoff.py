@@ -23,7 +23,7 @@ def func_backoff(exception, start_sleep_time=0.1, factor=2, border_sleep_time=10
 
                     if count_connection == max_connection:
                         log.info('Превышение количества подключений!')
-                        raise 'Превышение количества подключений.'
+                        raise error('Превышение количества подключений: {max_connection}')
 
                     if sleep_time >= border_sleep_time:
                         sleep_time = border_sleep_time
